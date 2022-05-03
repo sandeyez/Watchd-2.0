@@ -72,3 +72,21 @@ a {
 .breakWord {
   overflow-wrap: anywhere;
 }
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #fff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #1c243b;
+  border-radius: 8px;
+  border: 1px none #ffffff;
+}
