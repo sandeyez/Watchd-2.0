@@ -12,7 +12,7 @@ const SearchBar = () => {
     e.preventDefault();
     if (searchTerm < "\u0020" + 1) return;
     setSearchTerm("");
-    router.push("/search?q=" + searchTerm);
+    router.push("/search?q=" + searchTerm + "&page=1");
   };
 
   if (!render) return <div></div>;

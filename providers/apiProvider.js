@@ -90,7 +90,11 @@ export async function getSearchResults(query, page = 1) {
       `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=en-US&query=${query}&page=${page}`
     )
     .then((response) => {
-      return response.data.results;
+      return [
+        response.data.results,
+        response.data.total_results,
+        response.data.total_pages,
+      ];
     })
     .catch((error) => {
       console.log(error);
