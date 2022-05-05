@@ -22,7 +22,7 @@ const Input = ({
       </div>
       <Field
         type={type}
-        className="px-4 py-2 text-sm rounded-lg w-96 bg-darkBlue"
+        className="w-full px-4 py-2 text-sm rounded-lg bg-darkBlue"
         {...otherProps}
       />
       {errorMessage && (

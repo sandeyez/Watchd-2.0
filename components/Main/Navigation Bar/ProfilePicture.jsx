@@ -1,9 +1,13 @@
-const ProfilePicture = ({ className }) => {
+import { useUser } from "../../../config/firebase";
+
+const ProfilePicture = () => {
+  const user = useUser();
+
   return (
     <div
-      className={`w-8 h-8 overflow-hidden border-2 border-white rounded-full ${className}`}
+      className={"w-8 h-8 overflow-hidden border-2 border-white rounded-full"}
     >
-      <img src="https://picsum.photos/200" alt="" />
+      <img src={user?.photoURL ? user.photoURL : "/no_picture.svg"} alt="" />
     </div>
   );
 };

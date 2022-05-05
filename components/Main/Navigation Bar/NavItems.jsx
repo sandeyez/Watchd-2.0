@@ -5,6 +5,7 @@ import useScreenWidth from "../../../hooks/useScreenWidth";
 import { GoSearch } from "react-icons/go";
 import ProfilePicture from "./ProfilePicture";
 import { useRouter } from "next/router";
+import { useUser, logout } from "../../../config/firebase";
 
 const NavItems = ({ onClick }) => {
   const renderSearch = useScreenWidth("max", 1280);
@@ -47,10 +48,16 @@ const NavItems = ({ onClick }) => {
 };
 
 const ProfileIcon = () => {
+  const user = useUser();
+
+  if (!user) return null;
+
   return (
     <div className="items-center justify-start hidden gap-4 py-4 font-bold rounded-full md:flex h-1/2 bg-regularBlue ">
       <ProfilePicture className="ml-1" />
-      <h1 className="gradientText">Sandeyez</h1>
+      <h1 className="cursor-pointer gradientText" onClick={logout}>
+        {user.displayName.split(" ")[0]}
+      </h1>
       <RiArrowDownSLine className="w-8 h-8 mr-1 cursor-pointer" />
     </div>
   );

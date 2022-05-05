@@ -3,6 +3,7 @@ import SearchBar from "./SearchBar";
 import NavItems from "./NavItems";
 import HamburgerNav from "./HamburgerMenu/HamburgerNav";
 import useScreenWidth from "./../../../hooks/useScreenWidth";
+
 const Nav = () => {
   const renderHamburger = useScreenWidth("max", 870);
 

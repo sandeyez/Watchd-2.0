@@ -1,8 +1,12 @@
 import RegularButton from "./../Common/RegularButton";
 import GradientButton from "./../Common/GradientButton";
 import { IoMdAdd } from "react-icons/io";
+import { useUser } from "../../config/firebase";
 
 const Buttons = () => {
+  const user = useUser();
+
+  if (!user) return <div></div>;
   return (
     <div className="flex flex-col justify-end max-w-md col-span-2 gap-2 mini:gap-4 mini:flex-row md:gap-2 md:col-span-1 md:flex-col">
       <GradientButton text="Check-in" />

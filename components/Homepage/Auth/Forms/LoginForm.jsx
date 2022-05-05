@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import GradientButton from "./../../../Common/GradientButton";
 import Input from "./../../../Common/Input";
+import { logInWithEmailAndPassword } from "../../../../config/firebase";
 
 function LoginForm() {
   const validationSchema = Yup.object().shape({
@@ -15,6 +16,7 @@ function LoginForm() {
   });
 
   function handleLogin(email, password) {
+    logInWithEmailAndPassword(email, password);
     console.log(email, password);
   }
 
@@ -42,7 +44,7 @@ function LoginForm() {
             errorMessage={touched.password ? errors.password : null}
             required
           />
-          <div className="m-auto w-72">
+          <div className="w-48 m-auto mini:px-12 mini:w-72">
             <GradientButton
               text="Log in"
               disabled={isValidating || isSubmitting}

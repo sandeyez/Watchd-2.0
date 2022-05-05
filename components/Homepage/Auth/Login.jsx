@@ -1,9 +1,10 @@
 import RegularButton from "./../../Common/RegularButton";
 import LoginForm from "./Forms/LoginForm";
+import { signInWithGoogle } from "../../../config/firebase";
 
 const Login = ({ togglePage }) => {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full gap-4 p-16 py-16 text-center bg-regularBlue rounded-t-xl md:py-0">
+    <div className="flex flex-col items-center justify-center w-full h-full gap-4 p-8 py-16 text-center sm:p-16 bg-regularBlue rounded-t-xl md:py-0">
       <div>
         <h1 className="text-3xl font-bold sm:text-4xl gradientText">
           Welcome back.
@@ -12,8 +13,8 @@ const Login = ({ togglePage }) => {
           Keep track of your watchlist and your friends' activity.
         </h1>
       </div>
-      <div className="flex flex-col gap-4 w-80">
-        <RegularButton text="Log in with Google">
+      <div className="flex flex-col w-48 gap-4 mini:w-72">
+        <RegularButton text="Log in with Google" onClick={signInWithGoogle}>
           <img src="/google.svg" alt="" />
         </RegularButton>
       </div>
@@ -23,8 +24,8 @@ const Login = ({ togglePage }) => {
         <hr className="w-1/3 sm:w-1/4" />
       </div>
       <LoginForm />
-      <div className="flex items-center gap-1 text-xs">
-        <span>Don't have an account yet?</span>
+      <div className="items-center gap-1 text-xs">
+        <span>Don't have an account yet? </span>
         <span
           className="font-bold underline cursor-pointer"
           onClick={togglePage}
