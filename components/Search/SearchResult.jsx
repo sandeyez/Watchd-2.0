@@ -20,7 +20,7 @@ const SearchResult = ({ movie }) => {
         onMouseLeave={() => setActive(false)}
       />
       {active && (
-        <div className="absolute top-0 z-20 flex flex-col justify-end w-full h-full p-4 pointer-events-none bg-black/75">
+        <div className="absolute top-0 z-20 flex flex-col justify-end w-full h-full p-4 pointer-events-none bg-gradient-to-b from-black/50 to-black">
           <h1 className="text-xl font-bold gradientText">{movie.title}</h1>
           <h1 className="text-white">
             {movie.release_date && getReleaseYear(movie.release_date)}

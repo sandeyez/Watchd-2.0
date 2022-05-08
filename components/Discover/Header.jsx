@@ -7,10 +7,15 @@ import { getMovieBackdrop, getMoviePoster } from "./../../utils/movie";
 import RegularButton from "../Common/RegularButton";
 import { useRouter } from "next/router";
 import useScreenWidth from "./../../hooks/useScreenWidth";
+import { useAuth } from "../../contexts/AuthContext";
+import { useUserData } from "../../contexts/UserDataContext";
 
 const Header = ({ popularMovies }) => {
   const [headerMovie, setHeaderMovie] = useState(popularMovies[0]);
   const [index, setIndex] = useState(0);
+  const { user } = useAuth();
+  const { addToWatchlist, watchlistContains } = useUserData();
+
   const router = useRouter();
   const renderSmall = useScreenWidth("max", 870);
 
@@ -63,9 +68,14 @@ const Header = ({ popularMovies }) => {
             {headerMovie.overview}
           </h1>
           <hr className="w-24 mt-2 mb-4" />
-          <div className="w-56">
-            <RegularButton text="Add to Watchlist" />
-          </div>
+          {user && !watchlistContains(headerMovie.id) && (
+            <div className="w-56">
+              <RegularButton
+                text="Add to Watchlist"
+                onClick={() => addToWatchlist(headerMovie.id)}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

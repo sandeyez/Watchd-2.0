@@ -1,8 +1,10 @@
+import { useAuth } from "../../../contexts/AuthContext";
 import RegularButton from "./../../Common/RegularButton";
 import LoginForm from "./Forms/LoginForm";
-import { signInWithGoogle } from "../../../config/firebase";
 
 const Login = ({ togglePage }) => {
+  const { signInWithGoogle } = useAuth();
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4 p-8 py-16 text-center sm:p-16 bg-regularBlue rounded-t-xl md:py-0">
       <div>

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getSearchResults } from "../providers/apiProvider";
 import SearchResults from "../components/Search/SearchResults";
 import SearchPagination from "../components/Search/SearchPagination";
+import Head from "next/head";
 
 const Search = ({ query, page }) => {
   const [searchTerm, setSearchTerm] = useState(query);
@@ -42,10 +43,13 @@ const Search = ({ query, page }) => {
     console.log(page);
   }
 
-  if (searchResults === null) return null;
-
   return (
     <>
+      <Head>
+        <title>
+          {searchTerm ? `Searching "${searchTerm}" ` : "Search "}| Watchd.
+        </title>
+      </Head>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <SearchResults
         movies={searchResults}
@@ -53,11 +57,6 @@ const Search = ({ query, page }) => {
         setSearchResults={setSearchResults}
         totalResults={totalResults}
         currentPage={searchPage}
-      />
-      <SearchPagination
-        currentPage={searchPage}
-        totalPages={pages}
-        onPageSelect={handlePageSelect}
       />
     </>
   );

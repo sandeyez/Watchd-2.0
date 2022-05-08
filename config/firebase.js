@@ -1,13 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut,
-} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import {
   getFirestore,
   query,
@@ -15,6 +7,13 @@ import {
   collection,
   where,
   addDoc,
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -29,73 +28,142 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const auth = getAuth(app);
 const db = getFirestore(app);
 
-const googleProvider = new GoogleAuthProvider();
+// USER FUNCTIONS
 
-export const signInWithGoogle = async () => {
-  try {
-    const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    const docs = await getDocs(q);
-    if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
-      });
-    }
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
+// Add a new user to the database
+export async function addUser(
+  uid,
+  email,
+  username,
+  picture = "https://picsum.photos/200/200"
+) {
+  const dbUser = {
+    createdAt: serverTimestamp(),
+    email,
+    followers: [],
+    following: [],
+    movies: [],
+    name: username,
+    picture,
+    uid,
+    username: username.toLowerCase(),
+    watchlist: [],
+  };
+
+  await setDoc(doc(db, "Users", uid), dbUser);
+}
+
+// Add a value to an array field in the Users collection
+export async function addValueToUserArray(key, uid, value) {
+  const ref = doc(db, "Users", uid);
+  const obj = {};
+  obj[key] = arrayUnion(value);
+  await updateDoc(ref, obj);
+}
+
+// Remove a value from an array field in the Users collection
+export async function deleteValueFromUserArray(key, uid, value) {
+  const ref = doc(db, "Users", uid);
+  const obj = {};
+  obj[key] = arrayRemove(value);
+
+  await updateDoc(ref, obj);
+}
+
+// Get the field with key 'key' from the User with uid 'uid'
+export async function getUserField(key, uid) {
+  const ref = doc(db, "Users", uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    return snap.data()[key];
+  } else return null;
+}
+
+// Add a review for the current user to the database
+export async function addReview(uid, description, movieId, rating) {
+  const obj = {
+    createdAt: serverTimestamp(),
+    description,
+    likes: [],
+    movieId,
+    rating,
+    uid,
+  };
+
+  await addDoc(collection(db, "Reviews"), obj);
+
+  return obj;
+}
+
+// DATABASE FUNCTIONS
+export async function getReviewedMovies(uid) {
+  // Grab all user's reviews
+  let reviews = await queryDatabase("Reviews", "uid", "==", uid);
+
+  // Convert the Timestamp objects to JSON again
+  reviews.forEach(async (result) => {
+    result.createdAt = result.createdAt.toDate().toJSON();
+  });
+
+  // Sort reviews by rating
+  reviews.sort((a, b) => (a.rating > b.rating ? -1 : 1));
+
+  // Find all reviewed movies
+  reviews = await Promise.all(
+    reviews.map(async (review) => {
+      const movieResponse = await getMovie(review.movieId);
+      return { ...review, movie: movieResponse.data };
+    })
+  );
+
+  return reviews;
+}
+
+export async function getUserByUsername(username) {
+  // Find users with username
+  let results = await queryDatabase(
+    "Users",
+    "username",
+    "==",
+    username.toLowerCase()
+  );
+
+  let user;
+
+  if (results.length > 0) {
+    user = results[0];
+    // Convert Timestamp object to JSON
+    user.createdAt = user.createdAt.toDate().toJSON();
   }
-};
-
-export const logInWithEmailAndPassword = async (email, password) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
-
-export const registerWithEmailAndPassword = async (name, email, password) => {
-  try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res.user;
-    await addDoc(collection(db, "users"), {
-      uid: user.uid,
-      name,
-      authProvider: "local",
-      email,
-    });
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
-
-export const sendPasswordReset = async (email) => {
-  try {
-    await sendPasswordResetEmail(auth, email);
-    alert("Password reset link sent!");
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
-
-export const logout = () => {
-  signOut(auth);
-};
-
-export const useUser = () => {
-  const auth = getAuth(app);
-  const [user, loading, error] = useAuthState(auth);
-
   return user;
-};
+}
+
+export async function getUserByUid(uid) {
+  // Find users with username
+  let results = await queryDatabase("Users", "uid", "==", uid);
+
+  return results;
+}
+
+// Query a collection for a field that matched value with operator
+export async function queryDatabase(collectionName, field, operator, value) {
+  const ref = collection(db, collectionName);
+  const q = query(ref, where(field, operator, value));
+  const snapshot = await getDocs(q);
+
+  let results = [];
+
+  snapshot.forEach((doc) => results.push(doc.data()));
+  return results;
+}
+
+// Update the value of one of the user fields
+export async function updateUserField(key, uid, value) {
+  const ref = doc(db, "Users", uid);
+  const obj = {};
+  obj[key] = value;
+  await updateDoc(ref, obj);
+}

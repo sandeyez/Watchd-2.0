@@ -1,7 +1,7 @@
-import { useUser } from "../../config/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Ratings = ({ global }) => {
-  const user = useUser();
+  const { user } = useAuth();
   return (
     <div className="col-span-2 md:col-span-1">
       <h1 className="text-xl font-bold">Ratings</h1>

@@ -9,8 +9,6 @@ const Center = () => {
   const auth = getAuth(app);
   const [user, loading, error] = useAuthState(auth);
 
-  console.log(user && true);
-
   if (loading) return <Loading />;
 
   return user ? <Feed /> : <Auth />;

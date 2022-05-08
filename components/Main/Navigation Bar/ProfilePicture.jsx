@@ -1,7 +1,7 @@
-import { useUser } from "../../../config/firebase";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const ProfilePicture = () => {
-  const user = useUser();
+  const { user } = useAuth();
 
   return (
     <div

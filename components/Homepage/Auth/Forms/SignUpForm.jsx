@@ -3,16 +3,19 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import GradientButton from "../../../Common/GradientButton";
 import Input from "../../../Common/Input";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 function SignUpForm() {
+  const { registerWithEmailAndPassword } = useAuth();
+
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .min(6, "Please enter at least 6 characters")
-      .max(20, "Please enter at most 20 characters")
+      .max(12, "Please enter at most 12 characters")
       .required("Please enter a username"),
     email: Yup.string()
       .email("Please enter a valid email address")
-      .required("Please enter your email or username"),
+      .required("Please enter your email"),
     password: Yup.string()
       .min(8, "Please enter at least 8 characters")
       .required("Please enter your password"),
@@ -21,15 +24,17 @@ function SignUpForm() {
       .oneOf([Yup.ref("password"), null], "Two passwords must match"),
   });
 
-  function handleLogin(email, password) {
-    console.log(email, password);
+  function handleLogin(username, email, password) {
+    registerWithEmailAndPassword(username, email, password);
   }
 
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={validationSchema}
-      onSubmit={({ email, password }) => handleLogin(email, password)}
+      onSubmit={({ username, email, password }) =>
+        handleLogin(username, email, password)
+      }
     >
       {({ errors, touched, isValidating, isSubmitting }) => (
         <Form className="flex-col items-center space-y-4">
@@ -66,7 +71,7 @@ function SignUpForm() {
             }
             required
           />
-          <div className="m-auto w-72">
+          <div className="w-48 m-auto mini:px-12 mini:w-72">
             <GradientButton
               text="Sign up"
               disabled={isValidating || isSubmitting}

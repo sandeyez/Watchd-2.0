@@ -16,7 +16,7 @@ const Header = ({ movie }) => {
         releaseDate={movie.release_date}
         duration={movie.runtime}
       />
-      <Buttons />
+      <Buttons id={movie.id} />
     </>
   );
 };

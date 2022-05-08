@@ -1,7 +1,10 @@
 import Loading from "../Main/Loading";
 import SearchResult from "./SearchResult";
-import { useState } from "react";
 import { getSearchResults } from "../../providers/apiProvider";
+import { useRef, useEffect, useState } from "react";
+import RegularButton from "./../Common/RegularButton";
+import { AiOutlineReload } from "react-icons/ai";
+import { IoChevronUp } from "react-icons/io5";
 
 const SearchResults = ({
   movies,
@@ -11,6 +14,9 @@ const SearchResults = ({
   currentPage,
 }) => {
   const [page, setPage] = useState(1);
+  const [loadingResults, setLoadingResults] = useState(false);
+
+  const topRef = useRef();
 
   if (searchTerm.length === 0) return null;
   if (searchTerm.length > 0 && !movies) return <Loading />;
@@ -27,19 +33,54 @@ const SearchResults = ({
     );
   };
 
+  async function onShowMoreResults() {
+    setLoadingResults(true);
+    await addResults();
+    setLoadingResults(false);
+  }
+
   return (
-    <div className="px-8 max-w-[1440px] m-auto">
-      <h1 className="my-4 text-lg font-bold text-white sm:text-xl">
-        Showing results {Math.max(0, (currentPage - 1) * 20)} -{" "}
-        {Math.min(totalResults, currentPage * 20)} of {totalResults} search
-        results for "{searchTerm}"
-      </h1>
-      <div className="grid h-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
-        {movies.map((movie) => (
-          <SearchResult movie={movie} key={movie.id} />
-        ))}
+    <>
+      <div className="px-8 max-w-[1440px] m-auto">
+        <h1
+          className="my-4 text-lg font-bold text-white sm:text-xl"
+          ref={topRef}
+        >
+          Showing {totalResults} search results for "{searchTerm}"
+        </h1>
+        <div className="grid h-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
+          {movies.map((movie) => (
+            <SearchResult movie={movie} key={movie.id} />
+          ))}
+        </div>
+        <div className="w-64 m-auto my-10">
+          {loadingResults ? (
+            <Loading />
+          ) : (
+            totalResults > movies.length && (
+              <RegularButton
+                text="Show more results"
+                onClick={onShowMoreResults}
+              >
+                <AiOutlineReload />
+              </RegularButton>
+            )
+          )}
+        </div>
       </div>
-    </div>
+      <div
+        title="Scroll to top"
+        className="absolute flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer bg-gradient-to-br from-pink to-lightBlue right-8 bottom-8"
+        onClick={() =>
+          topRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          })
+        }
+      >
+        <IoChevronUp size={32} color="white" />
+      </div>
+    </>
   );
 };
 

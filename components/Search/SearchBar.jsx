@@ -9,10 +9,17 @@ const SearchBar = ({ setSearchTerm, searchTerm }) => {
     return () => clearTimeout(timer);
   }, [input]);
 
+  useEffect(() => {
+    return () => {
+      setInput("");
+      setSearchTerm("");
+    };
+  }, []);
+
   return (
     <div className="relative w-full">
       <input
-        className="block w-full py-4 pl-8 pr-16 font-semibold text-white xl:hidden bg-regularBlue caret-white placeholder:font-normal"
+        className="block w-full py-4 pl-8 pr-16 font-semibold text-white bg-regularBlue caret-white placeholder:font-normal"
         type="text"
         placeholder="Search for movies to watch..."
         value={input}

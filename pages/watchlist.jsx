@@ -1,18 +1,19 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { getPopularMovies } from "../providers/apiProvider";
 import { FaFilter } from "react-icons/fa";
-import CarousalView from "./../components/Watchlist/CarousalView";
+import WatchlistBody from "../components/Watchlist/WatchlistBody";
+import { useUserData } from "../contexts/UserDataContext";
 
 const Watchlist = () => {
   const [movies, setMovies] = useState([]);
+  const { fetchWatchlistMovies } = useUserData();
 
   useEffect(() => {
     fetchData();
   }, []);
 
   async function fetchData() {
-    const data = await getPopularMovies();
+    const data = await fetchWatchlistMovies();
     setMovies(data);
   }
   return (
@@ -27,12 +28,7 @@ const Watchlist = () => {
           <FaFilter size={24} />
         </div>
       </div>
-      {/* <div className="grid h-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
-        {movies.map((movie) => (
-          <SearchResult movie={movie} key={movie.id} />
-        ))}
-      </div> */}
-      <CarousalView movies={movies} />
+      <WatchlistBody movies={movies} />
     </div>
   );
 };

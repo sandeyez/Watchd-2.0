@@ -3,28 +3,32 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import GradientButton from "./../../../Common/GradientButton";
 import Input from "./../../../Common/Input";
-import { logInWithEmailAndPassword } from "../../../../config/firebase";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 function LoginForm() {
+  const { logInWithEmailAndPassword } = useAuth();
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Please enter a valid email address")
-      .required("Please enter your email or username"),
+      .required("Please enter your email"),
     password: Yup.string()
       .min(8, "Please enter at least 8 characters")
       .required("Please enter your password"),
   });
 
-  function handleLogin(email, password) {
+  function handleLogin(email, password, { setSubmitting, setErrors }) {
     logInWithEmailAndPassword(email, password);
-    console.log(email, password);
+    setSubmitting(false);
   }
 
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={validationSchema}
-      onSubmit={({ email, password }) => handleLogin(email, password)}
+      onSubmit={({ email, password }, actions) => {
+        handleLogin(email, password, actions);
+      }}
     >
       {({ errors, touched, isValidating, isSubmitting }) => (
         <Form className="flex-col items-center space-y-4">
