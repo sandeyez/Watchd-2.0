@@ -19,12 +19,12 @@ const HorizontalMovieList = ({ header, title, movies }) => {
         {title && <header className="text-2xl font-bold">{title}</header>}
         <div className="relative">
           <div
-            className="flex gap-4 mt-2 overflow-x-scroll noScrollbar"
+            className="flex gap-4 mt-2 overflow-x-scroll overflow-y-hidden"
             ref={containerRef}
           >
             {movies.map((movie) => (
               <img
-                className="w-20 rounded-lg cursor-pointer mini:w-24 lg:w-36"
+                className="rounded-lg cursor-pointer mini:w-24 lg:w-36 hover:translate-y-4"
                 src={getMoviePoster(movie.poster_path)}
                 onClick={() => {
                   router.push(`/movies/${movie.id}`);

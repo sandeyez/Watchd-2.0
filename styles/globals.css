@@ -90,3 +90,45 @@ a {
   border-radius: 8px;
   border: 1px none #ffffff;
 }
+
+.slideInFromTop {
+  animation-duration: 0.5s;
+  animation-name: slideFromTop;
+}
+
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-250px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.slideInFromLeft {
+  animation-duration: 0.5s;
+  animation-name: slideFromLeft;
+}
+
+@keyframes slideFromLeft {
+  from {
+    transform: translateX(-250px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.fadeIn {
+  animation-duration: 0.5s;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMovie } from "../../pages/movies/[id]";
 import FullScreenPopup from "../Common/FullScreenPopup";
 import { MdClose } from "react-icons/md";
@@ -16,6 +16,21 @@ function CheckInPopup({}) {
 
   const { movie, checkInVisible, setCheckInVisible } = useMovie();
 
+  // setCheckinVisible to false when the user clicks the Esc button
+  const handleClose = () => {
+    setCheckInVisible(false);
+  };
+
+  // Assign handleClose to the onClick event of the Escape button
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      e.key === "Escape" && handleClose();
+    });
+    return () => {
+      document.removeEventListener("keydown", handleClose);
+    };
+  }, [handleClose]);
+
   if (!checkInVisible) return null;
 
   function onSubmit() {
@@ -24,7 +39,7 @@ function CheckInPopup({}) {
 
   return (
     <FullScreenPopup>
-      <div className="relative w-[600px] h-[600px] bg-regularBlue rounded-2xl border-2 border-white text-white -z-30 overflow-hidden">
+      <div className="absolute w-[600px] h-[600px] bg-regularBlue rounded-2xl border-2 border-white text-white -z-30 overflow-hidden slideInFromTop">
         <MdClose
           className="absolute cursor-pointer right-6 top-6"
           size={25}

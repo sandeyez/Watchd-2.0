@@ -1,0 +1,14 @@
+/* Make element slide in from top with keyframes */
+.slideInFromTop {
+  animation-duration: 0.5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateY(-250px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
