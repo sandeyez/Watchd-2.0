@@ -65,9 +65,11 @@ function Profile({ username }) {
             <b>{profileUser.followers.length}</b> followers
           </p>
         </div>
-        <div className="w-48">
-          <GradientButton text="Follow" />
-        </div>
+        {!isLoggedIn && (
+          <div className="w-48">
+            <GradientButton text="Follow" />
+          </div>
+        )}
       </div>
     </div>
   );

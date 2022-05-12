@@ -1,8 +1,11 @@
 import { getMoviePoster } from "../../utils/movie";
 import Details from "./Details";
-import Buttons from "./Buttons";
+import MovieButtons from "./MovieButtons";
+import { useMovie } from "../../pages/movies/[id]";
 
-const Header = ({ movie }) => {
+const Header = () => {
+  const { movie } = useMovie();
+
   return (
     <>
       <img
@@ -16,7 +19,7 @@ const Header = ({ movie }) => {
         releaseDate={movie.release_date}
         duration={movie.runtime}
       />
-      <Buttons id={movie.id} />
+      <MovieButtons id={movie.id} />
     </>
   );
 };

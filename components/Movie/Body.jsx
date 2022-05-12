@@ -1,9 +1,11 @@
 import useScreenWidth from "../../hooks/useScreenWidth";
+import { useMovie } from "../../pages/movies/[id]";
 import Cast from "./Cast";
 import Center from "./Center";
 import Ratings from "./Ratings";
 
-const Body = ({ movie }) => {
+const Body = () => {
+  const { movie } = useMovie();
   const small = useScreenWidth("max", 640);
   const mid = useScreenWidth("max", 870);
 
