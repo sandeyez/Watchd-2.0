@@ -8,6 +8,8 @@ import {
   getReleaseYear,
 } from "../../utils/movie";
 import GradientButton from "./../Common/GradientButton";
+import { useUserData } from "../../contexts/UserDataContext";
+import toast from "react-hot-toast";
 
 function CheckInPopup({}) {
   const [rating, setRating] = useState(50);
@@ -15,6 +17,7 @@ function CheckInPopup({}) {
   const [changedRating, setChangedRating] = useState(false);
 
   const { movie, checkInVisible, setCheckInVisible } = useMovie();
+  const { addUserReview } = useUserData();
 
   // setCheckinVisible to false when the user clicks the Esc button
   const handleClose = () => {
@@ -33,8 +36,10 @@ function CheckInPopup({}) {
 
   if (!checkInVisible) return null;
 
-  function onSubmit() {
-    console.log(rating, review);
+  async function onSubmit() {
+    await addUserReview(movie.id, review, changedRating ? rating : null)
+      .then(toast.success("Review added!"))
+      .then(handleClose);
   }
 
   return (
@@ -67,7 +72,7 @@ function CheckInPopup({}) {
           </div>
           <div>
             <h1 className="font-bold">How did you like the movie? (1-10)</h1>
-            <div className="flex mt-2 space-x-2">
+            <div className="flex mt-1 space-x-2">
               <div className="flex items-center justify-center w-12 h-12 p-4 rounded-lg bg-darkBlue">
                 <h1 className="text-lg font-bold">
                   {changedRating ? rating / 10 : "-"}
@@ -88,7 +93,7 @@ function CheckInPopup({}) {
           </div>
           <div>
             <div className="flex items-center justify-between">
-              <h1 className="font-bold">Describe your rating: (optional)</h1>
+              <h1 className="font-bold">Describe your rating:</h1>
               <h1
                 className={`text-sm ${
                   review.length < 1000 ? "text-grey" : "text-red-500"
@@ -99,7 +104,7 @@ function CheckInPopup({}) {
               </h1>
             </div>
             <textarea
-              className="w-full h-32 p-2 text-sm rounded-lg resize-none bg-darkBlue"
+              className="w-full h-32 p-2 mt-1 text-sm rounded-lg resize-none bg-darkBlue noScrollbar"
               name="review"
               cols="10"
               rows="10"
@@ -109,7 +114,11 @@ function CheckInPopup({}) {
             />
           </div>
           <div className="mx-24">
-            <GradientButton text="Submit review" onClick={onSubmit} />
+            <GradientButton
+              text="Submit check-in"
+              onClick={onSubmit}
+              disabled={review.length > 1000}
+            />
           </div>
         </div>
       </div>
