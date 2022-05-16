@@ -7,33 +7,67 @@ import Loading from "../../components/Main/Loading";
 import { useRouter } from "next/router";
 import moment from "moment";
 import GradientButton from "../../components/Common/GradientButton";
+import ProfileMovieList from "./../../components/Profile/MovieList";
+import { useUserData } from "../../contexts/UserDataContext";
 
 function Profile({ username }) {
   const [profileUser, setProfileUser] = useState();
+  const [reviews, setReviews] = useState([]);
+
+  const { getUserReviews } = useUserData();
 
   useEffect(() => {
     getUser();
   }, []);
 
-  if (!profileUser) return <Loading />;
+  useEffect(() => {
+    if (profileUser) {
+      fetchReviews();
+    }
+  }, [profileUser]);
 
   const router = useRouter();
   const { user } = useAuth();
 
-  const isLoggedIn = user ? profileUser.uid === user.uid : false;
-  console.log(isLoggedIn);
+  if (!profileUser) return <Loading />;
 
+  const isLoggedIn = user ? profileUser.uid === user.uid : false;
+
+  // Get all user data from the database
   async function getUser() {
     const userData = await getUserByUsername(username);
 
     if (!userData) router.replace("/not-found");
 
     setProfileUser(userData);
-    console.log(userData);
+  }
+
+  async function fetchReviews() {
+    await getUserReviews(profileUser.uid, profileUser.reviews).then((data) =>
+      setReviews(data)
+    );
+  }
+
+  function sortByRating(a, b) {
+    if (isNaN(a.rating) && isNaN(b.rating)) {
+      return 0;
+    }
+    if (isNaN(a.rating)) {
+      return 1;
+    }
+    if (isNaN(b.rating)) {
+      return -1;
+    }
+
+    return b.rating - a.rating;
+  }
+
+  function sortByCreatedAt(a, b) {
+    return b.createdAt.seconds - a.createdAt.seconds;
   }
 
   return (
-    <div className="">
+    <div className="flex-col items-center space-y-4">
       <Head>
         <title>{profileUser.name}'s profile | Watchd.</title>
       </Head>
@@ -70,6 +104,18 @@ function Profile({ username }) {
             <GradientButton text="Follow" />
           </div>
         )}
+      </div>
+      <div className="flex flex-col items-center space-y-4">
+        <ProfileMovieList
+          header="Most recently watchd"
+          sortFunction={sortByCreatedAt}
+          reviewedMovies={reviews}
+        />
+        <ProfileMovieList
+          header="Highest rated movies"
+          sortFunction={sortByRating}
+          reviewedMovies={reviews}
+        />
       </div>
     </div>
   );

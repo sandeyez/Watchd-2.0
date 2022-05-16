@@ -3,6 +3,7 @@ import {
   addValueToUserArray,
   deleteValueFromUserArray,
   getUserField,
+  queryDatabase,
 } from "../config/firebase";
 import { getMovie } from "../providers/apiProvider";
 import { useState, useEffect, useContext, createContext } from "react";
@@ -14,38 +15,37 @@ const UserDataContext = createContext();
 export function UserDataProvider({ children }) {
   const [watchlist, setWatchlist] = useState(null);
   const [reviews, setReviews] = useState(null);
+  const [following, setFollowing] = useState(null);
 
   const { user } = useAuth();
 
-  // Fill watchlist from server on login and make sure it dissapears on log out
+  // Fill watchlist and reviews from server on login and make sure it dissapears on log out
   useEffect(() => {
     console.log("Reset watchlist");
     if (user) {
       getWatchlist();
+      getReviews();
+      getFollowing();
     } else {
       setWatchlist([]);
+      setReviews([]);
+      setFollowing([]);
     }
   }, [user]);
-
-  // useEffect(() => {
-  //   console.log("Reviews", reviews);
-  // }, [reviews]);
 
   async function getWatchlist() {
     const serverWatchlist = await getUserField("watchlist", user.uid);
     setWatchlist(serverWatchlist);
   }
 
-  // Fill reviews from server on login and make sure it dissapears on log out
-  useEffect(() => {
-    if (user) {
-      getReviews();
-    } else setReviews([]);
-  }, [user]);
-
   async function getReviews() {
     const serverReviews = await getUserField("reviews", user.uid);
     setReviews(serverReviews);
+  }
+
+  async function getFollowing() {
+    const serverFollowing = await getUserField("following", user.uid);
+    setFollowing(serverFollowing);
   }
 
   // Add a movie to the watchlist of the currently logged in user
@@ -110,6 +110,21 @@ export function UserDataProvider({ children }) {
     deleteValueFromUserArray("followers", uid, user.uid);
   }
 
+  async function getUserReview(uid, movieId) {
+    const reviews = await queryDatabase("Reviews", "uid", "==", uid);
+    const userReview = reviews.find((review) => review.movieId === movieId);
+
+    return userReview;
+  }
+
+  async function getUserReviews(uid, movieIds) {
+    const reviews = await Promise.all(
+      movieIds.map((id) => getUserReview(uid, id))
+    );
+
+    return reviews;
+  }
+
   const value = {
     addToWatchlist,
     removeFromWatchlist,
@@ -119,8 +134,10 @@ export function UserDataProvider({ children }) {
     addUserReview,
     reviews,
     hasReview,
+    following,
     followUser,
     unfollowUser,
+    getUserReviews,
   };
 
   return (
