@@ -59,7 +59,7 @@ function Profile({ username }) {
             <b>{profileUser.following.length}</b> following
           </p>
           <p className="text-center">
-            <b>{profileUser.movies.length}</b> watchd movies
+            <b>{profileUser.reviews?.length || 0}</b> watchd movies
           </p>
           <p className="text-right">
             <b>{profileUser.followers.length}</b> followers

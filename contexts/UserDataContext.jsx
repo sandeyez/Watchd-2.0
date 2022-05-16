@@ -3,7 +3,6 @@ import {
   addValueToUserArray,
   deleteValueFromUserArray,
   getUserField,
-  queryDatabase,
 } from "../config/firebase";
 import { getMovie } from "../providers/apiProvider";
 import { useState, useEffect, useContext, createContext } from "react";
@@ -28,6 +27,10 @@ export function UserDataProvider({ children }) {
     }
   }, [user]);
 
+  // useEffect(() => {
+  //   console.log("Reviews", reviews);
+  // }, [reviews]);
+
   async function getWatchlist() {
     const serverWatchlist = await getUserField("watchlist", user.uid);
     setWatchlist(serverWatchlist);
@@ -41,7 +44,7 @@ export function UserDataProvider({ children }) {
   }, [user]);
 
   async function getReviews() {
-    const serverReviews = await queryDatabase("Reviews", "uid", "==", user.uid);
+    const serverReviews = await getUserField("reviews", user.uid);
     setReviews(serverReviews);
   }
 
@@ -86,8 +89,8 @@ export function UserDataProvider({ children }) {
 
   // Add a review for the current user
   async function addUserReview(id, description, rating) {
-    const newReview = await addReview(user.uid, description, id, rating);
-    setReviews((reviews) => [...reviews, newReview]);
+    await addReview(user.uid, description, id, parseInt(rating));
+    reviews?.length > 0 ? setReviews([...reviews, id]) : setReviews([id]);
   }
 
   // Check if the current user has a review of a movie

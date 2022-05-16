@@ -8,6 +8,9 @@ import Header from "./../../components/Movie/Header";
 import Banner from "./../../components/Movie/Banner";
 import ReleaseDate from "./../../components/Movie/ReleaseDate";
 import CheckInPopup from "../../components/Movie/CheckInPopup";
+import { useUserData } from "../../contexts/UserDataContext";
+import { queryDatabase } from "../../config/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const MovieContext = createContext();
 
@@ -17,28 +20,66 @@ export const useMovie = () => {
 
 const Movie = ({ id }) => {
   const [movie, setMovie] = useState();
+  const [userHasReviewed, setUserHasReviewed] = useState(false);
+  const [review, setReview] = useState();
   const [checkInVisible, setCheckInVisible] = useState(false);
+
+  const { reviews } = useUserData();
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    if (reviews) {
+      const userHasReview = reviews.some((reviewId) => reviewId === id);
+      setUserHasReviewed(userHasReview);
+
+      if (userHasReview) {
+        fetchReview();
+      }
+    }
+  }, [reviews]);
+
+  console.log("userHasReviewed", userHasReviewed);
+
   async function fetchData() {
     try {
       const data = await getMovie(id);
       setMovie(data);
-      console.log(data);
     } catch (error) {
       router.replace("/not-found");
     }
   }
+
+  async function fetchReview() {
+    const userReview = await queryDatabase(
+      "Reviews",
+      "uid",
+      "==",
+      user.uid,
+      (review) => review.movieId === id
+    );
+    console.log("userReview", userReview);
+    setReview(userReview[0]);
+  }
+
   if (!movie) {
     return <Loading />;
   }
 
   return (
-    <MovieContext.Provider value={{ movie, checkInVisible, setCheckInVisible }}>
+    <MovieContext.Provider
+      value={{
+        movie,
+        checkInVisible,
+        setCheckInVisible,
+        userHasReviewed,
+        review,
+      }}
+    >
       <Head>
         <title>{movie.title} | Watchd.</title>
       </Head>
@@ -60,6 +101,10 @@ const Movie = ({ id }) => {
 export default Movie;
 
 export function getServerSideProps(ctx) {
-  const { id } = ctx.query;
-  return { props: { id } };
+  try {
+    const { id } = ctx.query;
+    return { props: { id: parseInt(id) } };
+  } catch (error) {
+    return { notFound: true };
+  }
 }

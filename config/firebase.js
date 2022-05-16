@@ -94,6 +94,7 @@ export async function addReview(uid, description, movieId, rating) {
   };
 
   await addDoc(collection(db, "Reviews"), obj);
+  await addValueToUserArray("reviews", uid, movieId);
 
   return obj;
 }
@@ -149,7 +150,15 @@ export async function getUserByUid(uid) {
 }
 
 // Query a collection for a field that matched value with operator
-export async function queryDatabase(collectionName, field, operator, value) {
+export async function queryDatabase(
+  collectionName,
+  field,
+  operator,
+  value,
+  filterResults = (result) => {
+    return true;
+  }
+) {
   const ref = collection(db, collectionName);
   const q = query(ref, where(field, operator, value));
   const snapshot = await getDocs(q);
@@ -157,7 +166,7 @@ export async function queryDatabase(collectionName, field, operator, value) {
   let results = [];
 
   snapshot.forEach((doc) => results.push(doc.data()));
-  return results;
+  return results.filter(filterResults);
 }
 
 // Update the value of one of the user fields

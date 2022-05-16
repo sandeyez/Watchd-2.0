@@ -1,0 +1,32 @@
+.checkInSlider {
+  width: 100%;
+  -webkit-appearance: none; /* Override default CSS styles */
+  appearance: none;
+  height: 0.75rem;
+  border-radius: 1.25rem;
+  background: linear-gradient(
+    83deg,
+    var(--gradientPink) 0%,
+    var(--gradientBlue) 100%
+  );
+  margin: 1rem 0;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.checkInSlider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 1.5625rem;
+  height: 1.5625rem;
+  background: white;
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+.checkInSlider::-moz-range-thumb {
+  width: 1.5625rem;
+  height: 1.5625rem;
+  background: white;
+  cursor: pointer;
+  border-radius: 100%;
+}

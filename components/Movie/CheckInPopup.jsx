@@ -10,10 +10,11 @@ import {
 import GradientButton from "./../Common/GradientButton";
 import { useUserData } from "../../contexts/UserDataContext";
 import toast from "react-hot-toast";
+import styles from "../../styles/styles.module.css";
 
 function CheckInPopup({}) {
   const [rating, setRating] = useState(50);
-  const [review, setReview] = useState("");
+  const [description, setDescription] = useState("");
   const [changedRating, setChangedRating] = useState(false);
 
   const { movie, checkInVisible, setCheckInVisible } = useMovie();
@@ -37,7 +38,7 @@ function CheckInPopup({}) {
   if (!checkInVisible) return null;
 
   async function onSubmit() {
-    await addUserReview(movie.id, review, changedRating ? rating : null)
+    await addUserReview(movie.id, description, changedRating ? rating : null)
       .then(toast.success("Review added!"))
       .then(handleClose);
   }
@@ -80,7 +81,7 @@ function CheckInPopup({}) {
               </div>
               <input
                 type="range"
-                className="w-full"
+                className={`${styles.checkInSlider} w-full`}
                 min="10"
                 max="100"
                 value={rating}
@@ -96,20 +97,20 @@ function CheckInPopup({}) {
               <h1 className="font-bold">Describe your rating:</h1>
               <h1
                 className={`text-sm ${
-                  review.length < 1000 ? "text-grey" : "text-red-500"
+                  description.length < 1000 ? "text-grey" : "text-red-500"
                 } cursor-default`}
                 title="Review must be less than 1000 characters"
               >
-                {1000 - review.length}
+                {1000 - description.length}
               </h1>
             </div>
             <textarea
               className="w-full h-32 p-2 mt-1 text-sm rounded-lg resize-none bg-darkBlue noScrollbar"
-              name="review"
+              name="description"
               cols="10"
               rows="10"
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="What did you think of the movie?"
             />
           </div>
@@ -117,7 +118,7 @@ function CheckInPopup({}) {
             <GradientButton
               text="Submit check-in"
               onClick={onSubmit}
-              disabled={review.length > 1000}
+              disabled={description.length > 1000}
             />
           </div>
         </div>

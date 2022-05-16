@@ -51,8 +51,6 @@ const ProfileIcon = () => {
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  console.log(user);
-
   if (!user) return null;
 
   return (
