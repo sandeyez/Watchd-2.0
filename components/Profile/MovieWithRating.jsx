@@ -6,7 +6,7 @@ function MovieWithRating({ review }) {
   const { rating, movie } = review;
 
   return (
-    <div className="relative w-36 mini:w-48 xl:w-56">
+    <div className="relative overflow-hidden text-sm rounded-lg w-36 mini:w-48 xl:w-56">
       <SearchResult movie={movie} />
       {!isNaN(rating) && (
         <div className="absolute z-20 top-2 right-2">

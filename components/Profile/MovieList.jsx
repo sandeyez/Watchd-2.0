@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getMovie } from "../../providers/apiProvider";
+import Loading from "../Main/Loading";
 import MovieWithRating from "./MovieWithRating";
 
 function ProfileMovieList({ header, reviewedMovies, sortFunction }) {
   const [reviews, setReviews] = useState([]);
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(null);
   const [gridColumns, setGridColumns] = useState(0);
 
   useEffect(() => {
@@ -55,6 +56,10 @@ function ProfileMovieList({ header, reviewedMovies, sortFunction }) {
     } else {
       setGridColumns(2);
     }
+  }
+
+  if (movies === null) {
+    return <Loading />;
   }
 
   return (

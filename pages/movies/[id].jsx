@@ -41,7 +41,7 @@ const Movie = ({ id }) => {
         fetchReview();
       }
     }
-  }, [reviews]);
+  }, [reviews, id]);
 
   console.log("userHasReviewed", userHasReviewed);
 
@@ -83,7 +83,10 @@ const Movie = ({ id }) => {
       <Head>
         <title>{movie.title} | Watchd.</title>
       </Head>
-      <CheckInPopup />
+      <CheckInPopup
+        popupActive={checkInVisible}
+        setPopupActive={setCheckInVisible}
+      />
       <div className="relative w-full h-full">
         <div className="top-0 left-0 right-0 z-20 m-auto md:absolute">
           <ReleaseDate date={movie.release_date} />
