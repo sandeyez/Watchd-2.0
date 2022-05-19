@@ -12,6 +12,7 @@
     "3d-react-carousal": "^5.0.0",
     "axios": "^0.25.0",
     "formik": "^2.2.9",
+    "javascript-time-ago": "^2.5.1",
     "moment": "^2.29.3",
     "next": "12.0.10",
     "nextjs-progressbar": "^0.0.13",
@@ -26,6 +27,7 @@
     "react-infinite-scroller": "^1.2.6",
     "react-loading-icons": "^1.0.8",
     "react-spring-3d-carousel": "^1.2.1",
+    "react-time-ago": "^7.1.9",
     "yup": "^0.32.11"
   },
   "devDependencies": {

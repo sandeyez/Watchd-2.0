@@ -62,7 +62,10 @@ const ProfileIcon = () => {
       >
         {user.displayName}
       </h1>
-      <RiArrowDownSLine className="w-8 h-8 mr-1 cursor-pointer" />
+      <RiArrowDownSLine
+        className="w-8 h-8 mr-1 cursor-pointer"
+        onClick={logout}
+      />
     </div>
   );
 };

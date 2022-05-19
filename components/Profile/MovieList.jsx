@@ -39,6 +39,8 @@ function ProfileMovieList({ header, reviewedMovies, sortFunction }) {
         })
       );
       reviewsWithMovieData.then((data) => setMovies(data));
+    } else {
+      setMovies([]);
     }
   }
 
@@ -64,7 +66,7 @@ function ProfileMovieList({ header, reviewedMovies, sortFunction }) {
 
   return (
     <div className="text-white">
-      <header className="flex items-center justify-between mb-2 text-xl font-bold">
+      <header className="flex items-center justify-between mb-2 text-2xl font-bold">
         <h1>{header}</h1>
         <h1 className="text-sm font-normal cursor-pointer">View all &gt;</h1>
       </header>

@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 
-function FullScreenPopup({
-  Component = () => null,
-  popupActive,
-  setPopupActive,
-}) {
+function FullScreenPopup({ popupActive, setPopupActive, children }) {
   useEffect(() => {
     document.addEventListener("keydown", (e) => onKeyPress(e));
 
@@ -21,7 +17,7 @@ function FullScreenPopup({
 
   return (
     <div className="absolute top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-black/90 md:bg-black/70 fadeIn">
-      <Component />
+      {children}
     </div>
   );
 }

@@ -8,7 +8,7 @@ const Ratings = () => {
   const [userRating, setUserRating] = useState();
 
   useEffect(() => {
-    if (review) setUserRating(review?.rating ? review.rating / 10 : "-");
+    setUserRating(review?.rating ? review.rating / 10 : "-");
   }, [review]);
 
   return (

@@ -14,8 +14,8 @@ import {
   setDoc,
   updateDoc,
   serverTimestamp,
+  deleteDoc,
 } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDxFkuhHoD2dgAdXB4wAHof4LjAuoP764A",
@@ -83,7 +83,7 @@ export async function getUserField(key, uid) {
 }
 
 // Add a review for the current user to the database
-export async function addReview(uid, description, movieId, rating) {
+export async function addReview(uid, username, description, movieId, rating) {
   const obj = {
     createdAt: serverTimestamp(),
     description,
@@ -91,6 +91,7 @@ export async function addReview(uid, description, movieId, rating) {
     movieId,
     rating,
     uid,
+    username,
   };
 
   await addDoc(collection(db, "Reviews"), obj);
@@ -149,6 +150,22 @@ export async function getUserByUid(uid) {
   return results;
 }
 
+export async function followUser(uid, followee) {
+  const obj = {
+    createdAt: serverTimestamp(),
+    followee,
+    follower: uid,
+  };
+
+  await setDoc(doc(db, "Friends", obj.follower + obj.followee), obj);
+
+  return obj;
+}
+
+export async function unfollowUser(followerUid, followeeUid) {
+  await deleteDoc(doc(db, "Friends", followerUid + followeeUid));
+}
+
 // Query a collection for a field that matched value with operator
 export async function queryDatabase(
   collectionName,
@@ -175,4 +192,10 @@ export async function updateUserField(key, uid, value) {
   const obj = {};
   obj[key] = value;
   await updateDoc(ref, obj);
+}
+
+export async function doesDocExist(collectionName, docId) {
+  const ref = doc(db, collectionName, docId);
+  const snapshot = await getDoc(ref);
+  return snapshot.exists();
 }

@@ -39,6 +39,8 @@ const Movie = ({ id }) => {
 
       if (userHasReview) {
         fetchReview();
+      } else {
+        setReview({});
       }
     }
   }, [reviews, id]);

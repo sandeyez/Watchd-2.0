@@ -105,6 +105,20 @@ a {
   }
 }
 
+.slideInFromBottom {
+  animation-duration: 0.5s;
+  animation-name: slideFromBottom;
+}
+
+@keyframes slideFromBottom {
+  from {
+    transform: translateY(250px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .slideInFromLeft {
   animation-duration: 0.5s;
   animation-name: slideFromLeft;

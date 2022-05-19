@@ -4,6 +4,9 @@ import {
   deleteValueFromUserArray,
   getUserField,
   queryDatabase,
+  followUser,
+  unfollowUser,
+  doesDocExist,
 } from "../config/firebase";
 import { getMovie } from "../providers/apiProvider";
 import { useState, useEffect, useContext, createContext } from "react";
@@ -15,7 +18,8 @@ const UserDataContext = createContext();
 export function UserDataProvider({ children }) {
   const [watchlist, setWatchlist] = useState(null);
   const [reviews, setReviews] = useState(null);
-  const [following, setFollowing] = useState(null);
+  const [following, setFollowing] = useState([]);
+  const [followers, setFollowers] = useState([]);
 
   const { user } = useAuth();
 
@@ -24,11 +28,13 @@ export function UserDataProvider({ children }) {
     console.log("Reset watchlist");
     if (user) {
       getWatchlist();
-      getReviews();
-      getFollowing();
+      getUserReviews();
+      getUserFollowers();
+      getUserFollowing();
     } else {
       setWatchlist([]);
       setReviews([]);
+      setFollowers([]);
       setFollowing([]);
     }
   }, [user]);
@@ -38,14 +44,49 @@ export function UserDataProvider({ children }) {
     setWatchlist(serverWatchlist);
   }
 
-  async function getReviews() {
-    const serverReviews = await getUserField("reviews", user.uid);
-    setReviews(serverReviews);
+  async function getReviews(uid) {
+    const serverReviews = await getUserField("reviews", uid);
+    return serverReviews;
   }
 
-  async function getFollowing() {
-    const serverFollowing = await getUserField("following", user.uid);
-    setFollowing(serverFollowing);
+  async function getUserReviews() {
+    await getReviews(user.uid).then((data) => setReviews(data));
+  }
+
+  async function getFollowing(uid) {
+    if (!uid) return [];
+    const serverFollowing = await queryDatabase(
+      "Friends",
+      "follower",
+      "==",
+      uid
+    );
+
+    return serverFollowing.map((friend) => friend.followee);
+  }
+
+  async function getFollowers(uid) {
+    if (!uid) return [];
+
+    const serverFollowers = await queryDatabase(
+      "Friends",
+      "followee",
+      "==",
+      uid
+    );
+    return serverFollowers.map((friend) => friend.follower);
+  }
+
+  async function getUserFollowers() {
+    await getFollowers(user.uid).then((data) =>
+      data.length > 0 ? setFollowers(data) : setFollowers([])
+    );
+  }
+
+  async function getUserFollowing() {
+    await getFollowing(user.uid).then((data) =>
+      data.length > 0 ? setFollowing(data) : setFollowing([])
+    );
   }
 
   // Add a movie to the watchlist of the currently logged in user
@@ -89,7 +130,13 @@ export function UserDataProvider({ children }) {
 
   // Add a review for the current user
   async function addUserReview(id, description, rating) {
-    await addReview(user.uid, description, id, parseInt(rating));
+    await addReview(
+      user.uid,
+      user.displayName,
+      description,
+      id,
+      parseInt(rating)
+    );
     reviews?.length > 0 ? setReviews([...reviews, id]) : setReviews([id]);
   }
 
@@ -98,16 +145,40 @@ export function UserDataProvider({ children }) {
     return reviews.some((element) => element.movieId === id);
   }
 
+  // Find a user by their username
+  async function findUser(username) {
+    const users = await queryDatabase(
+      "Users",
+      "username",
+      "==",
+      username.toLowerCase()
+    );
+    return users[0];
+  }
+
   // Follow the user with the given uid
-  function followUser(uid) {
-    addValueToUserArray("following", user.uid, uid);
-    addValueToUserArray("followers", uid, user.uid);
+  async function addFollowing(followUid, followName) {
+    await followUser(user.uid, followUid).then(() =>
+      setFollowing([...following, followUid])
+    );
+    toast.success("You are now following " + followName);
   }
 
   // Unfollow the user with the given uid
-  function unfollowUser(uid) {
-    deleteValueFromUserArray("following", user.uid, uid);
-    deleteValueFromUserArray("followers", uid, user.uid);
+  async function removeFollowing(followUid, followName) {
+    await unfollowUser(user.uid, followUid).then(() =>
+      setFollowing([...following].filter((elem) => elem !== followUid))
+    );
+    toast.error("You no longer follow " + followName);
+  }
+
+  // Check if the current user is following the user with the given uid
+  async function isFollowing(followeeUid) {
+    return await doesDocExist("Friends", user.uid + followeeUid).then(
+      (result) => {
+        return result;
+      }
+    );
   }
 
   async function getUserReview(uid, movieId) {
@@ -117,7 +188,8 @@ export function UserDataProvider({ children }) {
     return userReview;
   }
 
-  async function getUserReviews(uid, movieIds) {
+  async function getUserReviewedMovies(uid, movieIds) {
+    if (!movieIds) return [];
     const reviews = await Promise.all(
       movieIds.map((id) => getUserReview(uid, id))
     );
@@ -131,13 +203,19 @@ export function UserDataProvider({ children }) {
     watchlistContains,
     watchlist,
     fetchWatchlistMovies,
+    getReviews,
     addUserReview,
     reviews,
     hasReview,
     following,
-    followUser,
-    unfollowUser,
-    getUserReviews,
+    followers,
+    addFollowing,
+    removeFollowing,
+    getFollowers,
+    getFollowing,
+    getUserReviewedMovies,
+    findUser,
+    isFollowing,
   };
 
   return (
