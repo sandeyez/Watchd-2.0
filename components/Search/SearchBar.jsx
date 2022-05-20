@@ -1,8 +1,10 @@
 import { MdSearch } from "react-icons/md";
 import { useState, useEffect } from "react";
+import useScreenWidth from "../../hooks/useScreenWidth";
 
 const SearchBar = ({ setSearchTerm, searchTerm }) => {
   const [input, setInput] = useState(searchTerm);
+  const showSearch = useScreenWidth("max", 1280);
 
   useEffect(() => {
     const timer = setTimeout(() => setSearchTerm(input), 300);
@@ -15,6 +17,8 @@ const SearchBar = ({ setSearchTerm, searchTerm }) => {
       setSearchTerm("");
     };
   }, []);
+
+  if (!showSearch) return null;
 
   return (
     <div className="relative w-full">

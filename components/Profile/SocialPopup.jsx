@@ -51,7 +51,7 @@ function SocialPopup({ popupActive, setPopupActive }) {
   }
 
   function handleUnfollow() {
-    removeFollowing(resultUser.uid);
+    removeFollowing(resultUser.uid, resultUser.name);
     setIsFollowingResultUser(false);
   }
 

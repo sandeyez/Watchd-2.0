@@ -15,7 +15,7 @@ function FeedBody({ data, loading }) {
   }
 
   return (
-    <div className="flex flex-col space-y-4 overflow-y-scroll">
+    <div className="flex flex-col space-y-6 overflow-y-scroll ">
       {data.map((review, index) => {
         return <FriendPost post={review} key={index} />;
       })}

@@ -6,11 +6,11 @@ import { useUserData } from "../contexts/UserDataContext";
 
 const Watchlist = () => {
   const [movies, setMovies] = useState([]);
-  const { fetchWatchlistMovies } = useUserData();
+  const { watchlist, fetchWatchlistMovies } = useUserData();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [watchlist]);
 
   async function fetchData() {
     const data = await fetchWatchlistMovies();

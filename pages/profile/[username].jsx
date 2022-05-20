@@ -53,7 +53,7 @@ function Profile({ username }) {
   }, [user, profileUser]);
 
   useEffect(() => {
-    checkIfFollowing();
+    user && checkIfFollowing();
   }, [following, profileUser]);
 
   if (!profileUser) return <Loading />;
@@ -121,25 +121,26 @@ function Profile({ username }) {
           </p>
           <hr className="w-20 h-[1px] bg-white" />
           <ProfileStats />
-          {!isCurrentUser ? (
-            <div className="w-48">
-              <GradientButton
-                text={alreadyFollowing ? "Unfollow" : "Follow"}
-                onClick={
-                  alreadyFollowing
-                    ? () => removeFollowing(profileUser.uid, profileUser.name)
-                    : () => addFollowing(profileUser.uid, profileUser.name)
-                }
-              />
-            </div>
-          ) : (
-            <div className="w-48">
-              <GradientButton
-                text="Add friends"
-                onClick={() => setPopupActive(true)}
-              />
-            </div>
-          )}
+          {user &&
+            (!isCurrentUser ? (
+              <div className="w-48">
+                <GradientButton
+                  text={alreadyFollowing ? "Unfollow" : "Follow"}
+                  onClick={
+                    alreadyFollowing
+                      ? () => removeFollowing(profileUser.uid, profileUser.name)
+                      : () => addFollowing(profileUser.uid, profileUser.name)
+                  }
+                />
+              </div>
+            ) : (
+              <div className="w-48">
+                <GradientButton
+                  text="Add friends"
+                  onClick={() => setPopupActive(true)}
+                />
+              </div>
+            ))}
         </div>
         {reviews.length > 0 && (
           <div className="flex flex-col items-center space-y-8">

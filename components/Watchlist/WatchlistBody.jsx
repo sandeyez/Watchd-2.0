@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import SearchResult from "../Search/SearchResult";
+import { MdClose } from "react-icons/md";
+import { useUserData } from "../../contexts/UserDataContext";
 
 function WatchlistBody({ movies }) {
   const { user } = useAuth();
+  const { removeFromWatchlist } = useUserData();
 
   if (!user) return <p>You have to be logged in to keep a watchlist</p>;
 
@@ -17,7 +20,13 @@ function WatchlistBody({ movies }) {
   return (
     <div className="grid h-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
       {movies.map((movie) => (
-        <SearchResult movie={movie} key={movie.id} />
+        <div className="relative group" key={movie.id}>
+          <SearchResult
+            movie={movie}
+            showClose
+            onClose={() => removeFromWatchlist(movie.id)}
+          />
+        </div>
       ))}
     </div>
   );

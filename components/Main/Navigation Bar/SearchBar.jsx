@@ -11,7 +11,6 @@ const SearchBar = () => {
   const onSearch = (e) => {
     e.preventDefault();
     if (searchTerm < "\u0020" + 1) return;
-    setSearchTerm("");
     router.push("/search?q=" + searchTerm + "&page=1");
   };
 

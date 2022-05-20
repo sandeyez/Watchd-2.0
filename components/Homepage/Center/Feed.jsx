@@ -46,7 +46,7 @@ const Feed = () => {
   }
 
   return (
-    <div className="relative flex flex-col w-full gap-4 p-6 overflow-y-scroll bg-gradient-to-b from-regularBlue to-darkBlue rounded-t-xl noScrollbar">
+    <div className="relative flex flex-col w-full gap-4 p-6 bg-gradient-to-b from-regularBlue to-darkBlue rounded-t-xl noScrollbar">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold mini:text-2xl">
           Your friends' activity

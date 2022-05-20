@@ -83,6 +83,7 @@ a {
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 8px;
+  overflow: overlay;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -135,6 +136,20 @@ a {
 
 .fadeIn {
   animation-duration: 0.5s;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.quickFadeIn {
+  animation-duration: 0.2s;
   animation-name: fadeIn;
 }
 
