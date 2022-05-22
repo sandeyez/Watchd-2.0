@@ -1,7 +1,7 @@
 import { getMoviePoster } from "../../utils/movie";
 import Details from "./Details";
 import MovieButtons from "./MovieButtons";
-import { useMovie } from "../../pages/movies/[id]";
+import { useMovie } from "../../pages/movies/[movieId]";
 
 const Header = () => {
   const { movie } = useMovie();

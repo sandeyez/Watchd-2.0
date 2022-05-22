@@ -1,5 +1,5 @@
 import useScreenWidth from "../../hooks/useScreenWidth";
-import { useMovie } from "../../pages/movies/[id]";
+import { useMovie } from "../../pages/movies/[movieId]";
 import Cast from "./Cast";
 import Center from "./Center";
 import Ratings from "./Ratings";

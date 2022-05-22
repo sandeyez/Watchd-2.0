@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useMovie } from "../../pages/movies/[id]";
+import { useMovie } from "../../pages/movies/[movieId]";
 import FullScreenPopup from "../Common/FullScreenPopup";
 import { MdClose } from "react-icons/md";
 import {

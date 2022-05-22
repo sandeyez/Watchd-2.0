@@ -2,11 +2,11 @@ import { useEffect, useState, createContext, useContext } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getMovie } from "../../providers/apiProvider";
-import Loading from "./../../components/Main/Loading";
+import Loading from "../../components/Main/Loading";
 import Body from "../../components/Movie/Body";
-import Header from "./../../components/Movie/Header";
-import Banner from "./../../components/Movie/Banner";
-import ReleaseDate from "./../../components/Movie/ReleaseDate";
+import Header from "../../components/Movie/Header";
+import Banner from "../../components/Movie/Banner";
+import ReleaseDate from "../../components/Movie/ReleaseDate";
 import CheckInPopup from "../../components/Movie/CheckInPopup";
 import { useUserData } from "../../contexts/UserDataContext";
 import { queryDatabase } from "../../config/firebase";
@@ -18,7 +18,7 @@ export const useMovie = () => {
   return useContext(MovieContext);
 };
 
-const Movie = ({ id }) => {
+const Movie = ({ movieId }) => {
   const [movie, setMovie] = useState();
   const [userHasReviewed, setUserHasReviewed] = useState(false);
   const [review, setReview] = useState();
@@ -30,11 +30,11 @@ const Movie = ({ id }) => {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [movieId]);
 
   useEffect(() => {
     if (reviews) {
-      const userHasReview = reviews.some((reviewId) => reviewId === id);
+      const userHasReview = reviews.some((reviewId) => reviewId === movieId);
       setUserHasReviewed(userHasReview);
 
       if (userHasReview) {
@@ -43,13 +43,13 @@ const Movie = ({ id }) => {
         setReview({});
       }
     }
-  }, [reviews, id]);
+  }, [reviews, movieId]);
 
   console.log("userHasReviewed", userHasReviewed);
 
   async function fetchData() {
     try {
-      const data = await getMovie(id);
+      const data = await getMovie(movieId);
       setMovie(data);
     } catch (error) {
       router.replace("/not-found");
@@ -62,7 +62,7 @@ const Movie = ({ id }) => {
       "uid",
       "==",
       user.uid,
-      (review) => review.movieId === id
+      (review) => review.movieId === movieId
     );
     console.log("userReview", userReview);
     setReview(userReview[0]);
@@ -107,8 +107,8 @@ export default Movie;
 
 export function getServerSideProps(ctx) {
   try {
-    const { id } = ctx.query;
-    return { props: { id: parseInt(id) } };
+    const { movieId } = ctx.query;
+    return { props: { movieId: parseInt(movieId) } };
   } catch (error) {
     return { notFound: true };
   }

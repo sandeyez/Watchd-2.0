@@ -3,7 +3,7 @@ import GradientButton from "../Common/GradientButton";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { useUserData } from "../../contexts/UserDataContext";
 import { useAuth } from "../../contexts/AuthContext";
-import { useMovie } from "../../pages/movies/[id]";
+import { useMovie } from "../../pages/movies/[movieId]";
 
 const MovieButtons = ({ id }) => {
   const { user } = useAuth();

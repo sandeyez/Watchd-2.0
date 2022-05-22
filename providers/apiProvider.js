@@ -14,6 +14,20 @@ export async function getMovie(id) {
     });
 }
 
+export async function getActor(id) {
+  return await axios
+    .get(
+      `https://api.themoviedb.org/3/person/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=en-US`
+    )
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
+}
+
 export async function getPopularMovies() {
   return await axios
     .get(

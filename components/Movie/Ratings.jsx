@@ -1,5 +1,5 @@
 import { useAuth } from "../../contexts/AuthContext";
-import { useMovie } from "../../pages/movies/[id]";
+import { useMovie } from "../../pages/movies/[movieId]";
 import { useEffect, useState } from "react";
 
 const Ratings = () => {

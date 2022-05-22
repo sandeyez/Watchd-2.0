@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { getCast } from "../../providers/apiProvider";
 import Loading from "../Main/Loading";
 import { getActorPicture } from "../../utils/movie";
+import { useRouter } from "next/router";
+import { routeActor } from "./../../utils/actors";
 
 const Cast = ({ id }) => {
   const [cast, setCast] = useState([]);
@@ -27,6 +29,7 @@ const Cast = ({ id }) => {
             profilePath={actor.profile_path}
             name={actor.name}
             character={actor.character}
+            id={actor.id}
             key={actor.id}
           />
         ))}
@@ -35,7 +38,8 @@ const Cast = ({ id }) => {
   );
 };
 
-const CastMember = ({ profilePath, name, character }) => {
+const CastMember = ({ profilePath, name, character, id }) => {
+  const router = useRouter();
   return (
     <div className="grid gap-2 grid-cols-[50px_auto]">
       <div className="h-full overflow-hidden aspect-square">
@@ -46,7 +50,12 @@ const CastMember = ({ profilePath, name, character }) => {
         />
       </div>
       <div>
-        <h1 className="font-bold breakWord">{name}</h1>
+        <h1
+          className="font-bold cursor-pointer breakWord"
+          onClick={() => routeActor(router, id)}
+        >
+          {name}
+        </h1>
         <h1 className="text-sm">{character}</h1>
       </div>
     </div>
