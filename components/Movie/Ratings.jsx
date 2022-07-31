@@ -30,10 +30,11 @@ const Ratings = () => {
 export default Ratings;
 
 const RatingElement = ({ title, rating }) => {
+  console.log(rating, Number.isNaN(rating));
   return (
     <div>
       <h1>{title && title}</h1>
-      <span className="text-3xl font-bold">{rating !== 0 ? rating : "-"}</span>
+      <span className="text-3xl font-bold">{(!Number.isNaN(Number(rating)) && rating !== 0) ? Number(rating).toFixed(1) : "-"}</span>
       <span className="hidden mini:inline">/10</span>
     </div>
   );

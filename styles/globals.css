@@ -1,163 +1,161 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
-
+@import "../fonts/fonts.css";
 :root {
-  --darkblue: #101724;
-  --lightblue: #1d253c;
-
-  --accentBlue: #303e58;
-  --gradientBlue: #1fd2ff;
-  --gradientPink: #ab62ff;
-  --grey: #7a7a7a;
+    --darkblue: #101724;
+    --lightblue: #1d253c;
+    --accentBlue: #303e58;
+    --gradientBlue: #1fd2ff;
+    --gradientPink: #ab62ff;
+    --grey: #7a7a7a;
 }
 
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: Poppins, sans-serif;
-  background-color: #101724;
-  height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    font-family: Poppins, sans-serif;
+    background-color: #101724;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 *:focus {
-  border: none;
-  outline: none;
+    border: none;
+    outline: none;
 }
 
 .gradientText {
-  background: -webkit-linear-gradient(
-    0deg,
-    var(--gradientPink) 0%,
-    var(--gradientBlue) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 120%;
-  display: inline-block;
+    background: -webkit-linear-gradient(0deg, var(--gradientPink) 0%, var(--gradientBlue) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 120%;
 }
 
 .remainingScreenHeight {
-  height: calc(100vh - 80px);
+    height: calc(100vh - 80px);
 }
 
 .noScrollbar {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 .noScrollbar::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .breakWord {
-  overflow-wrap: anywhere;
+    overflow-wrap: anywhere;
 }
+
 
 /* ===== Scrollbar CSS ===== */
+
+
 /* Firefox */
+
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #fff;
 }
 
+
 /* Chrome, Edge, and Safari */
+
 *::-webkit-scrollbar {
-  width: 8px;
-  overflow: overlay;
+    width: 8px;
+    overflow: overlay;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #1c243b;
-  border-radius: 8px;
-  border: 1px none #ffffff;
+    background-color: #1c243b;
+    border-radius: 8px;
+    border: 1px none #ffffff;
 }
 
 .slideInFromTop {
-  animation-duration: 0.5s;
-  animation-name: slideFromTop;
+    animation-duration: 0.5s;
+    animation-name: slideFromTop;
 }
 
 @keyframes slideFromTop {
-  from {
-    transform: translateY(-250px);
-  }
-  to {
-    transform: translateY(0);
-  }
+    from {
+        transform: translateY(-250px);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
 .slideInFromBottom {
-  animation-duration: 0.5s;
-  animation-name: slideFromBottom;
+    animation-duration: 0.5s;
+    animation-name: slideFromBottom;
 }
 
 @keyframes slideFromBottom {
-  from {
-    transform: translateY(250px);
-  }
-  to {
-    transform: translateY(0);
-  }
+    from {
+        transform: translateY(250px);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
 .slideInFromLeft {
-  animation-duration: 0.5s;
-  animation-name: slideFromLeft;
+    animation-duration: 0.5s;
+    animation-name: slideFromLeft;
 }
 
 @keyframes slideFromLeft {
-  from {
-    transform: translateX(-250px);
-  }
-  to {
-    transform: translateY(0);
-  }
+    from {
+        transform: translateX(-250px);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
 .fadeIn {
-  animation-duration: 0.5s;
-  animation-name: fadeIn;
+    animation-duration: 0.5s;
+    animation-name: fadeIn;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .quickFadeIn {
-  animation-duration: 0.2s;
-  animation-name: fadeIn;
+    animation-duration: 0.2s;
+    animation-name: fadeIn;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

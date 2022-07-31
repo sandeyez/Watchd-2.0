@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <>
       <img
-        className="col-span-2 px-12 mini:col-span-1 mini:px-0"
+        className="col-span-2 px-12 mini:col-span-1 mini:px-0 rounded-xl"
         src={getMoviePoster(movie.poster_path)}
         alt={`${movie.title} poster`}
       />

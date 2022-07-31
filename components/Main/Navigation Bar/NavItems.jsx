@@ -57,7 +57,7 @@ const ProfileIcon = () => {
     <div className="items-center justify-start hidden gap-4 py-4 font-bold rounded-full md:flex h-1/2 bg-regularBlue ">
       <ProfilePicture className="ml-1" />
       <h1
-        className="cursor-pointer gradientText"
+        className="cursor-pointer gradientText line-clamp-1"
         onClick={() => router.push(`/profile/${user.displayName}`)}
       >
         {user.displayName}

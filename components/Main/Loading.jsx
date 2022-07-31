@@ -1,4 +1,4 @@
-import TailSpin from "react-loading-icons/dist/components/tail-spin";
+import { TailSpin } from "react-loading-icons";
 
 const Loading = () => {
   return (
